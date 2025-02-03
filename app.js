@@ -153,27 +153,110 @@ function updateExportButton() {
 // 创建导出区域
 function createExportArea() {
     const exportArea = document.createElement('div');
-    exportArea.style.cssText = 'background: white; padding: 40px; font-family: Arial; font-size: 24px; line-height: 2.5;';
+    exportArea.style.cssText = `
+        background: white;
+        width: 1280px;
+        height: 1706px;
+        padding: 40px;
+        font-family: Arial;
+        font-size: 20px;
+        line-height: 1.5;
+        position: fixed;
+        left: -9999px;
+        overflow: auto;
+    `;
     
-    albums.forEach(album => {
-        const albumTitle = document.createElement('div');
-        albumTitle.style.cssText = 'font-weight: bold; margin-top: 20px; margin-bottom: 10px;';
-        albumTitle.textContent = `${album.name} (${album.year})`;
-        exportArea.appendChild(albumTitle);
+    // 添加标题
+    const title = document.createElement('h1');
+    title.style.cssText = `
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 32px;
+        color: #333;
+    `;
+    title.textContent = '周杰伦歌曲清单';
+    exportArea.appendChild(title);
+    
+    // 创建网格容器
+    const gridContainer = document.createElement('div');
+    gridContainer.style.cssText = `
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        margin-top: 20px;
+    `;
+    
+    // 分两列显示专辑
+    const midPoint = Math.ceil(albums.length / 2);
+    const leftAlbums = albums.slice(0, midPoint);
+    const rightAlbums = albums.slice(midPoint);
+    
+    [leftAlbums, rightAlbums].forEach(columnAlbums => {
+        const column = document.createElement('div');
         
-        const songs = jayChowAlbums[album.name];
-        songs.forEach(song => {
-            const songDiv = document.createElement('div');
-            songDiv.style.cssText = 'display: inline-block; margin-right: 20px; margin-bottom: 10px;';
-            songDiv.textContent = song;
+        columnAlbums.forEach(album => {
+            const albumSection = document.createElement('div');
+            albumSection.style.cssText = 'margin-bottom: 20px;';
             
-            if (listenedSongs.has(song)) {
-                songDiv.style.background = 'linear-gradient(transparent 60%, #98FB98 40%)';
-            }
+            const albumTitle = document.createElement('div');
+            albumTitle.style.cssText = `
+                font-weight: bold;
+                margin-bottom: 10px;
+                font-size: 24px;
+                color: #333;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 5px;
+            `;
+            albumTitle.textContent = `${album.name} (${album.year})`;
+            albumSection.appendChild(albumTitle);
             
-            exportArea.appendChild(songDiv);
+            const songsContainer = document.createElement('div');
+            songsContainer.style.cssText = `
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            `;
+            
+            const songs = jayChowAlbums[album.name];
+            songs.forEach(song => {
+                const songDiv = document.createElement('div');
+                songDiv.style.cssText = `
+                    padding: 3px 8px;
+                    font-size: 16px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                `;
+                
+                if (listenedSongs.has(song)) {
+                    songDiv.style.cssText += `
+                        display: inline;
+                        background: linear-gradient(transparent 20%, #98FB98 20%, #98FB98 60%, transparent 60%);
+                    `;
+                }
+                songDiv.textContent = song;
+                songsContainer.appendChild(songDiv);
+            });
+            
+            albumSection.appendChild(songsContainer);
+            column.appendChild(albumSection);
         });
+        
+        gridContainer.appendChild(column);
     });
+    
+    exportArea.appendChild(gridContainer);
+    
+    // 添加统计信息
+    const stats = document.createElement('div');
+    stats.style.cssText = `
+        text-align: center;
+        margin-top: 20px;
+        font-size: 18px;
+        color: #666;
+    `;
+    stats.textContent = `已听: ${listenedSongs.size} / 总数: ${getTotalSongCount()}`;
+    exportArea.appendChild(stats);
     
     return exportArea;
 }
