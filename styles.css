@@ -1,0 +1,93 @@
+.song-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.song-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #fff;
+    text-align: center;
+}
+
+.song-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.song-card.listened {
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+}
+
+.song-card .title {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.album-container {
+    margin-bottom: 2rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.album-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #333;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.song-item {
+    background: white;
+    padding: 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.song-item:hover {
+    background: #e9ecef;
+}
+
+.song-item.listened {
+    position: relative;
+    background: #d1e7dd;
+}
+
+.song-item.listened::after {
+    content: '✓';
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    color: #198754;
+    font-weight: bold;
+}
+
+.selection-controls {
+    display: flex;
+    align-items: center;
+}
+
+#selection-count {
+    margin-left: 1rem;
+    font-size: 0.9rem;
+}
+
+#export-area {
+    background-color: white;
+    padding: 20px;
+    width: 1280px;
+    height: 1706px;
+    position: absolute;
+    left: -9999px;
+}
