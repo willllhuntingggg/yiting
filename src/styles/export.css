@@ -1,0 +1,51 @@
+.export-container {
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 在导出时应用的类 */
+.exporting {
+  width: 1280px !important;
+  height: 1706px !important;
+  transform: none !important;
+  transition: none !important;
+  box-sizing: border-box !important;
+  
+  /* 确保内容正确排版 */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  
+  /* 防止内容溢出 */
+  overflow: hidden !important;
+  
+  /* 重置可能影响布局的属性 */
+  position: relative !important;
+  float: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  
+  /* 移动端特殊处理 */
+  -webkit-text-size-adjust: none !important;
+  -webkit-transform: none !important;
+  -ms-transform: none !important;
+}
+
+/* 导出时内部元素的样式 */
+.exporting * {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+  transition: none !important;
+  position: relative !important;
+  float: none !important;
+}
+
+/* 确保图片不会变形 */
+.exporting img {
+  object-fit: contain !important;
+  max-width: 100% !important;
+  height: auto !important;
+} 

@@ -153,27 +153,83 @@ function updateExportButton() {
 // 创建导出区域
 function createExportArea() {
     const exportArea = document.createElement('div');
-    exportArea.style.cssText = 'background: white; padding: 40px; font-family: Arial; font-size: 24px; line-height: 2.5;';
+    exportArea.style.cssText = `
+        width: 1280px;
+        height: 1706px;
+        background: white;
+        padding: 40px;
+        font-family: Arial;
+        font-size: 20px;
+        line-height: 2;
+        position: fixed;
+        top: -9999px;
+        left: -9999px;
+        overflow: hidden;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+    `;
     
+    // 添加标题
+    const titleDiv = document.createElement('div');
+    titleDiv.style.cssText = 'font-size: 32px; font-weight: bold; margin-bottom: 20px; text-align: center;';
+    titleDiv.textContent = '周杰伦歌曲收听记录';
+    exportArea.appendChild(titleDiv);
+    
+    // 创建内容容器
+    const contentDiv = document.createElement('div');
+    contentDiv.style.cssText = `
+        flex: 1;
+        overflow-y: auto;
+        column-count: 2;
+        column-gap: 40px;
+        column-fill: auto;
+        height: calc(100% - 100px);
+    `;
+    
+    // 添加专辑和歌曲
     albums.forEach(album => {
+        const albumSection = document.createElement('div');
+        albumSection.style.cssText = 'break-inside: avoid; margin-bottom: 20px;';
+        
         const albumTitle = document.createElement('div');
-        albumTitle.style.cssText = 'font-weight: bold; margin-top: 20px; margin-bottom: 10px;';
+        albumTitle.style.cssText = 'font-weight: bold; margin-bottom: 10px; font-size: 24px;';
         albumTitle.textContent = `${album.name} (${album.year})`;
-        exportArea.appendChild(albumTitle);
+        albumSection.appendChild(albumTitle);
+        
+        const songsContainer = document.createElement('div');
+        songsContainer.style.cssText = 'display: flex; flex-wrap: wrap; gap: 10px;';
         
         const songs = jayChowAlbums[album.name];
         songs.forEach(song => {
             const songDiv = document.createElement('div');
-            songDiv.style.cssText = 'display: inline-block; margin-right: 20px; margin-bottom: 10px;';
+            songDiv.style.cssText = `
+                display: inline-block;
+                margin-right: 15px;
+                margin-bottom: 5px;
+                font-size: 18px;
+                line-height: 1.8;
+            `;
             songDiv.textContent = song;
             
             if (listenedSongs.has(song)) {
                 songDiv.style.background = 'linear-gradient(transparent 60%, #98FB98 40%)';
             }
             
-            exportArea.appendChild(songDiv);
+            songsContainer.appendChild(songDiv);
         });
+        
+        albumSection.appendChild(songsContainer);
+        contentDiv.appendChild(albumSection);
     });
+    
+    exportArea.appendChild(contentDiv);
+    
+    // 添加统计信息
+    const statsDiv = document.createElement('div');
+    statsDiv.style.cssText = 'margin-top: 20px; text-align: right; font-size: 20px; border-top: 1px solid #eee; padding-top: 10px;';
+    statsDiv.textContent = `已听: ${listenedSongs.size} / ${getTotalSongCount()} 首`;
+    exportArea.appendChild(statsDiv);
     
     return exportArea;
 }
@@ -272,10 +328,22 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(exportArea);
         
         try {
-            const canvas = await html2canvas(exportArea);
+            const canvas = await html2canvas(exportArea, {
+                width: 1280,
+                height: 1706,
+                scale: 2,
+                useCORS: true,
+                backgroundColor: null,
+                logging: true,
+                windowWidth: 1280,
+                windowHeight: 1706,
+                scrollX: 0,
+                scrollY: 0
+            });
+            
             const link = document.createElement('a');
             link.download = '周杰伦歌单.png';
-            link.href = canvas.toDataURL();
+            link.href = canvas.toDataURL('image/png');
             link.click();
         } finally {
             document.body.removeChild(exportArea);
