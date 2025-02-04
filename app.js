@@ -228,11 +228,7 @@ document.addEventListener('touchcancel', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 清空localStorage和已听歌曲集合
-    localStorage.removeItem('listenedSongs');
-    listenedSongs.clear();
-    
-    // 渲染专辑
+    loadListenedSongs();
     renderAlbums();
     updateExportButton();
     
